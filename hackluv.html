@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hack de Amor</title>
+    <title>Código de Amor</title>
     <style>
+        /* ========================================================= */
+        /* === ESTILOS GENERALES Y LAYOUT === */
+        /* ========================================================= */
         body {
-            background-color: black;
-            color: #00ff00;
+            background-color: #000;
+            color: #ff66cc; /* Tono de rosa/magenta */
             font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             flex-direction: column;
             text-align: center;
-            overflow: hidden;
         }
 
+        /* Contenedor principal para centrar el contenido */
         .container {
             position: relative;
             width: 100%;
@@ -27,89 +31,211 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 1;
         }
 
-        .hack-text {
+        /* ========================================================= */
+        /* === EFECTO DE LLUVIA DE CÓDIGO (MATRIX RAIN) CON CORAZONES === */
+        /* ========================================================= */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* ========================================================= */
+        /* === ESTILOS DEL TEXTO Y ANIMACIONES === */
+        /* ========================================================= */
+        /* Estilo para los mensajes que simulan la terminal de amor */
+        .love-code-text {
             font-size: 2em;
-            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+            text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff66cc;
             white-space: pre;
-            margin-bottom: 20px;
+            margin: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in;
         }
 
-        .glitch-text {
+        /* Estilos del mensaje de amor que late */
+        .heartbeat-text {
             font-size: 1.5em;
             color: #ffffff;
-            text-shadow: 0 0 5px #ffffff;
-            animation: glitch-anim 2s infinite linear alternate-reverse;
-            transition: opacity 0.5s ease-in-out;
-            opacity: 0;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff;
             position: absolute;
-            top: 55%;
+            top: 60%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            animation: none; /* Se activa con JavaScript */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        @keyframes glitch-anim {
-            0% {
-                transform: translate(0);
-            }
-            20% {
-                transform: translate(-5px, 5px);
-            }
-            40% {
-                transform: translate(-5px, -5px);
-            }
-            60% {
-                transform: translate(5px, 5px);
-            }
-            80% {
-                transform: translate(5px, -5px);
-            }
-            100% {
-                transform: translate(0);
-            }
+        /* Animación del efecto de latido en los mensajes */
+        @keyframes heartbeat-anim {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Estilos para el poema final */
+        #final-poem {
+            font-size: 1.2em;
+            color: #ffffff;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
+    <canvas id="matrix-canvas"></canvas>
+
     <div class="container">
-        <pre class="hack-text">
-~ ~ ~ `9098687*%%^$%%##^0000001101010101
-///////////////????????>>><>.-`
-HACK IN PROGRESS...
-~ ~ ~ `9098687*%%^$%%##^0000001101010101
-///////////////????????>>><>.-`
+        <pre class="love-code-text static-text">
+// Archivo: corazon.sys
+// Autor: Lia
+// Objetivo: hackear el corazón de Brandon
         </pre>
-        <div id="glitch-message" class="glitch-text"></div>
+        
+        <pre class="love-code-text dynamic-text" id="typing-text"></pre>
+        
+        <pre class="love-code-text static-text">
+// HACKEO DE CORAZÓN COMPLETADO.
+// Estado: Conexión infinita.
+        </pre>
+        
+        <div id="heartbeat-message" class="heartbeat-text"></div>
+
+        <div id="final-poem"></div>
     </div>
 
-    <script>
-        const glitchMessageElement = document.getElementById('glitch-message');
-        const loveMessages = [
-            "Mi amor, eres el código que completa mi vida.",
-            "Tú y yo, un bug que no quiero arreglar.",
-            "Eres el algoritmo que descifró mi corazón.",
-            "Nuestra historia es un bucle infinito de amor.",
-            "Conexión establecida... Corazón hackeado.",
-            "El amor que siento por ti, es tan grande como el universo...",
-            "Mis pensamientos, un stream infinito de tu nombre.",
-            "Eres la contraseña de mi felicidad.",
-            "En este universo digital, mi amor por ti es análogo.",
-            "Nuestro amor es una compilación perfecta.",
-        ];
+    <audio id="typing-sound" src="https://www.soundjay.com/button/button-3.mp3" preload="auto"></audio>
 
+    <script>
+        // Array de mensajes de amor poéticos
+        const loveMessages = [
+            "Tú y yo, un código perfecto, sin fallas, sin errores.",
+            "Mi corazón es un bucle infinito que repite tu nombre.",
+            "Eres el algoritmo que descifró el misterio de mi felicidad.",
+            "Cada día contigo es una nueva línea de código, más bella que la anterior.",
+            "La conexión entre nosotros es irrompible.",
+            "Eres la única constante en mi caótica vida de variables.",
+            "Compilando nuestro amor...",
+        ];
+        
+        // Poema tierno final
+        const finalPoem = [
+            "Eres la luz de mis días y el brillo de mis noches.",
+            "El susurro que llena mis silencios.",
+            "El latido que da ritmo a mi vida.",
+            "Simplemente, el amor de mi vida."
+        ].join('\n');
+
+        // Elementos del DOM
+        const heartbeatMessageElement = document.getElementById('heartbeat-message');
+        const staticTexts = document.querySelectorAll('.static-text');
+        const typingTextElement = document.getElementById('typing-text');
+        const typingSound = document.getElementById('typing-sound');
+        const finalPoemElement = document.getElementById('final-poem');
         let messageIndex = 0;
 
-        function showGlitchMessage() {
-            glitchMessageElement.textContent = loveMessages[messageIndex];
-            glitchMessageElement.style.opacity = 1;
-            setTimeout(() => {
-                glitchMessageElement.style.opacity = 0;
-                messageIndex = (messageIndex + 1) % loveMessages.length;
-                setTimeout(showGlitchMessage, 3000); // Muestra el siguiente mensaje después de 3 segundos
-            }, 3000); // El mensaje permanece visible durante 3 segundos
+        // Función para simular el efecto de máquina de escribir (typing)
+        function typeWriter(text, i, callback) {
+            if (i < text.length) {
+                typingTextElement.innerHTML += text.charAt(i);
+                typingSound.currentTime = 0;
+                typingSound.play();
+                setTimeout(() => typeWriter(text, i + 1, callback), 100);
+            } else if (callback) {
+                setTimeout(callback, 1500);
+            }
         }
 
+        // Función para mostrar los mensajes de amor que late
+        function showHeartbeatMessage() {
+            heartbeatMessageElement.textContent = loveMessages[messageIndex];
+            heartbeatMessageElement.style.opacity = 1;
+            heartbeatMessageElement.style.animation = "heartbeat-anim 1.5s infinite";
+            
+            setTimeout(() => {
+                heartbeatMessageElement.style.opacity = 0;
+                heartbeatMessageElement.style.animation = "none";
+                messageIndex = (messageIndex + 1) % loveMessages.length;
+
+                if (messageIndex === 0) { // Cuando los mensajes terminan, muestra el poema
+                    showFinalPoem();
+                } else {
+                    setTimeout(showHeartbeatMessage, 1500);
+                }
+            }, 3000); // El mensaje permanece visible 3 segundos
+        }
+
+        // Función para mostrar el poema final
+        function showFinalPoem() {
+            finalPoemElement.textContent = finalPoem;
+            finalPoemElement.style.opacity = 1;
+        }
+
+        // Función principal que inicia toda la secuencia visual
+        function startSequence() {
+            staticTexts.forEach(text => text.style.opacity = 1);
+            
+            setTimeout(() => {
+                typingTextElement.style.opacity = 1;
+                typeWriter("Comenzando el hackeo... Corazón detectado. Iniciando script de amor...", 0, showHeartbeatMessage);
+            }, 1000);
+        }
+
+        // =========================================================
+        // === LÓGICA DE LA LLUVIA DE CÓDIGO CON CORAZONES ===
+        // =========================================================
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+=-`~[]{}|:;"<>,./?❤️';
+
+        let drops = [];
+        let columns;
+        const fontSize = 16;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = canvas.width / fontSize;
+            drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff66cc'; /* Color de la lluvia */
+            ctx.font = `${fontSize}px 'Courier New'`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
+
+        // Cuando el DOM esté listo, inicia la secuencia principal
         document.addEventListener('DOMContentLoaded', () => {
-            showGlitchMessage();
+            startSequence();
         });
     </script>
 </body>
