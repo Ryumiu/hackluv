@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack de Amor</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hack-text {
+            font-size: 2em;
+            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+            white-space: pre;
+            margin-bottom: 20px;
+        }
+
+        .glitch-text {
+            font-size: 1.5em;
+            color: #ffffff;
+            text-shadow: 0 0 5px #ffffff;
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 55%;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-5px, 5px);
+            }
+            40% {
+                transform: translate(-5px, -5px);
+            }
+            60% {
+                transform: translate(5px, 5px);
+            }
+            80% {
+                transform: translate(5px, -5px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <pre class="hack-text">
+~ ~ ~ `9098687*%%^$%%##^0000001101010101
+///////////////????????>>><>.-`
+HACK IN PROGRESS...
+~ ~ ~ `9098687*%%^$%%##^0000001101010101
+///////////////????????>>><>.-`
+        </pre>
+        <div id="glitch-message" class="glitch-text"></div>
+    </div>
+
+    <script>
+        const glitchMessageElement = document.getElementById('glitch-message');
+        const loveMessages = [
+            "Mi amor, eres el código que completa mi vida.",
+            "Tú y yo, un bug que no quiero arreglar.",
+            "Eres el algoritmo que descifró mi corazón.",
+            "Nuestra historia es un bucle infinito de amor.",
+            "Conexión establecida... Corazón hackeado.",
+            "El amor que siento por ti, es tan grande como el universo...",
+            "Mis pensamientos, un stream infinito de tu nombre.",
+            "Eres la contraseña de mi felicidad.",
+            "En este universo digital, mi amor por ti es análogo.",
+            "Nuestro amor es una compilación perfecta.",
+        ];
+
+        let messageIndex = 0;
+
+        function showGlitchMessage() {
+            glitchMessageElement.textContent = loveMessages[messageIndex];
+            glitchMessageElement.style.opacity = 1;
+            setTimeout(() => {
+                glitchMessageElement.style.opacity = 0;
+                messageIndex = (messageIndex + 1) % loveMessages.length;
+                setTimeout(showGlitchMessage, 3000); // Muestra el siguiente mensaje después de 3 segundos
+            }, 3000); // El mensaje permanece visible durante 3 segundos
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showGlitchMessage();
+        });
+    </script>
+</body>
+</html>
